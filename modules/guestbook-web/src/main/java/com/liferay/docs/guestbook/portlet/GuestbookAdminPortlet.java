@@ -17,6 +17,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextFactory;
+import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 @Component(
@@ -50,7 +52,10 @@ public class GuestbookAdminPortlet extends MVCPortlet {
 		try {
 			_guestbookLocalService.addGuestbook(serviceContext.getUserId(),
 					name, serviceContext);
+			SessionMessages.add(request, "guestbookAdded");
+			
 		} catch (PortalException pe) {
+			SessionErrors.add(request, pe.getClass().getName());
 
 			Logger.getLogger(GuestbookAdminPortlet.class.getName())
 					.log(Level.SEVERE, null, pe);
@@ -70,6 +75,9 @@ public class GuestbookAdminPortlet extends MVCPortlet {
 
 		try {
 			_guestbookLocalService.deleteGuestbook(guestbookId, serviceContext);
+			
+			 SessionMessages.add(request, "guestbookDeleted");
+			
 		} catch (PortalException pe) {
 
 			Logger.getLogger(GuestbookAdminPortlet.class.getName())
@@ -89,6 +97,8 @@ public class GuestbookAdminPortlet extends MVCPortlet {
 		try {
 			_guestbookLocalService.updateGuestbook(serviceContext.getUserId(),
 					guestbookId, name, serviceContext);
+			
+			 SessionMessages.add(request, "guestbookUpdated");
 
 		} catch (PortalException pe) {
 
