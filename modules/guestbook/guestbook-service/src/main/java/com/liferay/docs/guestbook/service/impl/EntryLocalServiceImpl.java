@@ -26,6 +26,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.search.Indexable;
+import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
@@ -52,7 +54,9 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 	 * com.liferay.docs.guestbook.service.EntryLocalServiceUtil} to access the
 	 * entry local service.
 	 */
+	
 
+	@Indexable(type = IndexableType.REINDEX)
 	public Entry addEntry(long userId, long guestbookId, String name,
 			String email, String message, ServiceContext serviceContext)
 			throws PortalException {
@@ -90,6 +94,7 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 		return entry;
 	}
 	
+	@Indexable(type = IndexableType.DELETE)
 	public Entry deleteEntry(long entryId, ServiceContext serviceContext)
 			throws PortalException {
 
@@ -120,7 +125,8 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 	public int getEntriesCount(long groupId, long guestbookId) {
 	    return entryPersistence.countByG_G(groupId, guestbookId);
 	}
-
+	
+	@Indexable(type = IndexableType.REINDEX)
 	public Entry updateEntry(long userId, long guestbookId, long entryId,
 			String name, String email, String message,
 			ServiceContext serviceContext)
